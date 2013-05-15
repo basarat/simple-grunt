@@ -94,7 +94,7 @@ interface IGruntFileObject {
     readYAML(filepath, options?: IGruntFileObjectOptionsSimple);
     write(filepath, contents, options?: IGruntFileObjectOptionsSimple);
     copy(srcpath, destpath, options?: IGruntFileObjectOptions);
-    delete (filepath, options?: { force?: bool; });
+    delete(filepath, options?: { force?: bool; });
 
     // Directories
     mkdir(dirpath, mode?);
@@ -131,7 +131,9 @@ interface IGruntFileObject {
 ////////////////
 /// Globally called export function module.exports
 ////////////////
-declare var exports: (grunt: IGrunt) => void;
+declare var module: {
+    exports(grunt: IGrunt): void;
+}
 
 ////////////////
 /// Sample grunt plugin definition: 
@@ -219,17 +221,19 @@ interface IGruntConfig {
 // http://gruntjs.com/getting-started#an-example-gruntfile
 
 
-exports = function (grunt) {
+function setup(grunt:IGrunt) {
 
     // Project configuration.
     grunt.initConfig({
         less: {
-            'dev': {                
+            'dev': {
+               
             }
         }
     }
-    );
-    
+        );
+
+
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-less');
 
@@ -237,3 +241,5 @@ exports = function (grunt) {
     grunt.registerTask('default', ['less:dev']);
 
 };
+
+(module).exports = setup;
