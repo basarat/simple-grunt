@@ -216,21 +216,26 @@ interface IGruntConfig {
 }
 
 
-interface IBar{
+interface IBar {
     bar: string;
 }
 
-interface IFoo{
+interface IFoo {
     a?: {
-        [key: string]: IBar; // Once you have a string indexer all other properties 
-        options?: IBar;        // e.g Options, but have the same type 
+        [key: string]: IBar; // This is not captured by intellisense, But is captured by type checks
+        options?: IBar;      // This is fine (intellisense + type checked)
     }
 }
 
 var x: IFoo = {
-    a: {        
+    a: {
         'someKey': {
-            bar:'asdf' // put any thing other than a string here and you get an error
+            // Does not show intellisense for IBar. 
+            bar: 'asdf' //However does type check. If property ommited or wrong type you get an error. 
+        },
+        options: {
+            // Does show intellisense for IBar: 
+            bar: 'bsdf'
         }        
     }
 }
@@ -240,16 +245,19 @@ var x: IFoo = {
 // http://gruntjs.com/getting-started#an-example-gruntfile
 
 
-function setup(grunt:IGrunt) {
+function setup(grunt: IGrunt) {
 
     // Project configuration.
-    grunt.initConfig({
-        less: {
-            'dev': {
-               
+    grunt.initConfig(
+        {
+            less: {
+                'dev': {
+                    options: {
+                        compress:true
+                    }   
+                }
             }
         }
-    }
         );
 
 
