@@ -216,6 +216,25 @@ interface IGruntConfig {
 }
 
 
+interface IBar{
+    bar: string;
+}
+
+interface IFoo{
+    a?: {
+        [key: string]: IBar; // Once you have a string indexer all other properties 
+        options?: IBar;        // e.g Options, but have the same type 
+    }
+}
+
+var x: IFoo = {
+    a: {        
+        'someKey': {
+            bar:'asdf' // put any thing other than a string here and you get an error
+        }        
+    }
+}
+
 
 // Official code sample from 
 // http://gruntjs.com/getting-started#an-example-gruntfile
